@@ -23,41 +23,75 @@
 <body>
   <header>
     <h1>Estate Sale Gallery</h1>
-    <p>Contact: <a href="mailto:youremail@example.com">youremail@example.com</a> | Phone: (123) 456-7890 | Location: Your Suburb, Your City</p>
+    <p>
+      Contact: <a href="mailto:youremail@example.com">youremail@example.com</a> |
+      Phone: (123) 456-7890 |
+      Location: Your Suburb, Your City
+    </p>
   </header>
 
-  <section class="gallery">
-    <!-- Example card; replicate for each SKU -->
-    <div class="card">
-      <img src="https://res.cloudinary.com/dx3e6ozjv/image/upload/v1710061402/BalineseChest_1.jpg" alt="Antique Balinese Carved Storage Chest">
-      <div class="card-content">
-        <h2>Antique Balinese Carved Storage Chest</h2>
-        <p>67 × 115 × 61 cm | Qty: 1</p>
-        <p>Price: $600 – 900 AUD</p>
-      </div>
-    </div>
-    <!-- Repeat for each item, updating image URL, title, dimensions, qty, and price -->
+  <!-- Gallery Section -->
+  <section class="gallery" id="gallery">
+    <!-- Cards are injected here by JavaScript -->
   </section>
 
+  <!-- Inquiry Form -->
   <form action="mailto:youremail@example.com?subject=Estate%20Sale%20Inquiry" method="POST" enctype="text/plain">
     <h2>Enquire About an Item</h2>
-    <label for="name">Your Name</label>
-    <input type="text" id="name" name="name" placeholder="John Doe" required>
-
-    <label for="email">Your Email</label>
-    <input type="email" id="email" name="email" placeholder="john@example.com" required>
-
-    <label for="sku">Item SKU</label>
-    <select id="sku" name="sku">
-      <!-- Populate options with SKUs -->
-      <option value="ANTQ-BALI-CHST-01">ANTQ-BALI-CHST-01</option>
-      <!-- Add all SKUs here -->
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <select name="sku">
+      <!-- SKUs will be populated by JS -->
     </select>
-
-    <label for="message">Message</label>
-    <textarea id="message" name="message" rows="4" placeholder="I am interested in this item..."></textarea>
-
+    <textarea name="message" rows="4" placeholder="I am interested in this item…"></textarea>
     <button type="submit">Send Inquiry</button>
   </form>
+
+  <!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script>
+    // 1) Publish your Google Sheet as CSV and paste its URL below
+    const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSyanuQjDOvLEw1JJ1rcWgqMyrmNgxElVPUVnAatc1kUUog4yAXkd4BthJRO5WVG3myv9ggDsRlOrZy/pub?output=csv';
+
+    // 2) Function to build each card
+    function createCard(item) {
+      const photoUrl = item.Photos.split(',')[0].trim();
+      return `
+        <div class="card">
+          <img src="${photoUrl}" alt="${item['Item Name']}">
+          <div class="card-content">
+            <h2>${item['Item Name']}</h2>
+            <p>${item['Dimensions (H × W × D cm)']} cm | Qty: ${item.Qty}</p>
+            <p>Price: ${item['Est. Price Range (AUD)']} AUD</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // 3) Populate SKU dropdown in the form
+    function addOption(selectEl, sku) {
+      const opt = document.createElement('option');
+      opt.value = sku;
+      opt.text = sku;
+      selectEl.appendChild(opt);
+    }
+
+    // 4) Fetch, parse, and render
+    Papa.parse(sheetCsvUrl, {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const gallery = document.getElementById('gallery');
+        const skuSelect = document.querySelector('form select[name="sku"]');
+
+        results.data.forEach(item => {
+          if (item.SKU) {
+            gallery.insertAdjacentHTML('beforeend', createCard(item));
+            addOption(skuSelect, item.SKU);
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
