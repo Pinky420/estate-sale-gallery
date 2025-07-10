@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estate Sale Gallery</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
+    header { text-align: center; margin-bottom: 20px; }
+    h1 { font-size: 2em; margin: 0; }
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .card img { width: 100%; height: auto; display: block; }
+    .card-content { padding: 10px; }
+    .card-content h2 { font-size: 1.1em; margin: 0 0 5px; }
+    .card-content p { margin: 0 0 5px; font-size: 0.9em; }
+    form { max-width: 600px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    form h2 { margin-top: 0; }
+    form input, form textarea, form select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; }
+    form button { padding: 10px 20px; border: none; background: #007BFF; color: #fff; border-radius: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Estate Sale Gallery</h1>
+    <p>Contact: <a href="mailto:youremail@example.com">youremail@example.com</a> | Phone: (123) 456-7890 | Location: Your Suburb, Your City</p>
+  </header>
+
+  <section class="gallery">
+    <!-- Example card; replicate for each SKU -->
+    <div class="card">
+      <img src="https://res.cloudinary.com/dx3e6ozjv/image/upload/v1710061402/BalineseChest_1.jpg" alt="Antique Balinese Carved Storage Chest">
+      <div class="card-content">
+        <h2>Antique Balinese Carved Storage Chest</h2>
+        <p>67 × 115 × 61 cm | Qty: 1</p>
+        <p>Price: $600 – 900 AUD</p>
+      </div>
+    </div>
+    <!-- Repeat for each item, updating image URL, title, dimensions, qty, and price -->
+  </section>
+
+  <form action="mailto:youremail@example.com?subject=Estate%20Sale%20Inquiry" method="POST" enctype="text/plain">
+    <h2>Enquire About an Item</h2>
+    <label for="name">Your Name</label>
+    <input type="text" id="name" name="name" placeholder="John Doe" required>
+
+    <label for="email">Your Email</label>
+    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+
+    <label for="sku">Item SKU</label>
+    <select id="sku" name="sku">
+      <!-- Populate options with SKUs -->
+      <option value="ANTQ-BALI-CHST-01">ANTQ-BALI-CHST-01</option>
+      <!-- Add all SKUs here -->
+    </select>
+
+    <label for="message">Message</label>
+    <textarea id="message" name="message" rows="4" placeholder="I am interested in this item..."></textarea>
+
+    <button type="submit">Send Inquiry</button>
+  </form>
+</body>
+</html>
